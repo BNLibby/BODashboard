@@ -16,10 +16,13 @@ def convert_df_to_csv(df):
     return df.to_csv().encode('utf-8')
 
 def get_spp_df(api: ERCOTAPI, date:dt.date = dt.date.today()):
-    current_spp_df = DataFrame(api.get_json_dict(api.get_dam_spp(deliveryDateFrom=str(date), deliveryDateTo=str(date), settlementPoint="HB_WEST"))["data"], 
-                                  columns=["Date", "Hour Ending", "Settlement Point", "SPP", "Repeat Flag"])
-    current_spp_df["Hour Ending"] = [int(x[:-3]) for x in current_spp_df["Hour Ending"]]
-    current_spp_df.drop("Repeat Flag", inplace=True, axis=1)
+    try:
+        current_spp_df = DataFrame(api.get_json_dict(api.get_dam_spp(deliveryDateFrom=str(date), deliveryDateTo=str(date), settlementPoint="HB_WEST"))["data"], 
+                                    columns=["Date", "Hour Ending", "Settlement Point", "SPP", "Repeat Flag"])
+        current_spp_df["Hour Ending"] = [int(x[:-3]) for x in current_spp_df["Hour Ending"]]
+        current_spp_df.drop("Repeat Flag", inplace=True, axis=1)
+    except KeyError:
+        get_spp_df(api, date)
     
     subheader("Currently Showing Data For: " + str(current_spp_df["Date"].iloc[0]))
     table(current_spp_df)
