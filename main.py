@@ -23,6 +23,7 @@ def get_spp_df(api: ERCOTAPI, date:dt.date = dt.date.today()):
         current_spp_df.drop("Repeat Flag", inplace=True, axis=1)
     except KeyError:
         get_spp_df(api, date)
+        return None
     
     subheader("Currently Showing Data For: " + str(current_spp_df["Date"].iloc[0]))
     table(current_spp_df)
