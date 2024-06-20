@@ -28,5 +28,5 @@ def get_spp_df(date:dt.date = dt.date.today()):
 
 header("West Hub DAM SPP Downloader")
 subheader("Instructions:\n1. Select Date From Calendar Below\n3. Wait Until New Table Appears\n4. Click 'Download Data As CSV'")
-date = date_input("Select Date To Download", value="today", min_value=dt.date(2024,1,1), max_value=dt.date.today())
+date = date_input("Select Date To Download", value="today", min_value=dt.date(2024,1,1), max_value=dt.date.today() + dt.timedelta(days=1))
 get_spp_df(date)
